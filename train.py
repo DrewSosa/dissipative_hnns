@@ -13,10 +13,10 @@ def get_args(as_dict=False):
   arg_dict = {'input_dim': 2,
               'hidden_dim': 256, # capacity
               'output_dim': 2,
-              'learning_rate': 1e-2, 
-              'test_every': 200,
+              'learning_rate': 2e-3, 
+              'test_every': 50,
               'print_every': 200,
-              'batch_size': 100,
+              'batch_size': 256,
               'train_split': 0.8,  # train/test dataset percentage
               'total_steps': 5000,  # because we have a synthetic dataset
               'device': 'cuda', # {"cpu", "cuda"} for using GPUs
@@ -58,6 +58,7 @@ def train(model, args, data):
       test_loss = (dx_test-dx_hat_test).pow(2).mean().item() # L2 loss
 
       results['test_loss'].append(test_loss)
+    if step % args.print_every == 0:
       print('step {}, dt {:.3f}, train_loss {:.2e}, test_loss {:.2e}'
             .format(step, time.time()-t0, loss.item(), test_loss)) #.item() is just the integer of PyTorch scalar. 
       t0 = time.time()
