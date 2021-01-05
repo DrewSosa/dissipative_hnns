@@ -1,0 +1,12 @@
+# Deep Helmholtz Decomposition
+# Andrew Sosanya, Sam Greydanus | 2020
+
+.DS_Store
+*.egg-info
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+.pytest_cache
+*.tar
+*.zip
+# *.pkl # allow pickle files
+__pycache__
