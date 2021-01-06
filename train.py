@@ -13,11 +13,11 @@ def get_args(as_dict=False):
   arg_dict = {'input_dim': 2,
               'hidden_dim': 256, # capacity
               'output_dim': 2,
-              'learning_rate': 2e-3, 
+              'learning_rate': 1e-2, 
               'test_every': 50,
               'print_every': 200,
-              'batch_size': 256,
-              'train_split': 0.8,  # train/test dataset percentage
+              'batch_size': 100,
+              'train_split': 0.85,  # train/test dataset percentage
               'total_steps': 5000,  # because we have a synthetic dataset
               'device': 'cuda', # {"cpu", "cuda"} for using GPUs
               'seed': 42}
