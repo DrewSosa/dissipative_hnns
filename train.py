@@ -20,7 +20,8 @@ def get_args(as_dict=False):
               'train_split': 0.85,  # train/test dataset percentage
               'total_steps': 5000,  # because we have a synthetic dataset
               'device': 'cuda', # {"cpu", "cuda"} for using GPUs
-              'seed': 42}
+              'seed': 42,
+              'as_separate': False}
   return arg_dict if as_dict else ObjectView(arg_dict)
 
 

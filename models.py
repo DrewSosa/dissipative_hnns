@@ -19,25 +19,26 @@ class MLP(nn.Module):
 class HHD(nn.Module): 
   def __init__(self, input_dim, hidden_dim):
     super(HHD, self).__init__()  # Inherit the methods of the Module constructor
-    self.mlp = MLP(input_dim, 2, hidden_dim)  # Instantiate an instance of our baseline model.
+    self.mlp_h = MLP(input_dim, 1, hidden_dim)  # Instantiate an MLP for learning the conservative component
+    self.mlp_d = MLP(input_dim, 1, hidden_dim)  # Instantiate an MLP for learning the dissipative component
     
   def forward(self, x, rho=None, as_separate=False): 
     inputs = torch.cat([x, rho], axis=-1) if rho is not None else x
-    output = self.mlp(inputs)  # Bx2 Get the scalars from our baseline model
+    D = self.mlp_d(inputs)
+    H = self.mlp_h(inputs)
 
-    D,H = output[...,0], output[...,1]  # Separate out the Dissapative (D) and Hamiltonian (H) functions
-    D_hat = torch.autograd.grad(D.sum(), x, create_graph=True)[0]  #Take their gradients
-    notH_hat = torch.autograd.grad(H.sum(), x, create_graph=True)[0]
+    irr_component = torch.autograd.grad(D.sum(), x, create_graph=True)[0]  # Take their gradients
+    rot_component = torch.autograd.grad(H.sum(), x, create_graph=True)[0]
 
     # For H, we need the symplectic gradient, and therefore
     #   we split our tensor into 2 and swap the chunks.
-    dHdq, dHdp = torch.split(notH_hat, notH_hat.shape[-1]//2, dim=1)
+    dHdq, dHdp = torch.split(rot_component, rot_component.shape[-1]//2, dim=1)
     q_dot_hat, p_dot_hat = dHdp, -dHdq
-    H_hat = torch.cat([q_dot_hat, p_dot_hat], axis=-1)
+    rot_component = torch.cat([q_dot_hat, p_dot_hat], axis=-1)
     if as_separate:
-        return D_hat, H_hat  # Return the two fields seperately, or return the composite field. 
+        return irr_component, rot_component  # Return the two fields seperately, or return the composite field. 
 
-    return D_hat + H_hat  # return D_hat, H_hat if as_separate else D_hat + H_hat
+    return irr_component + rot_component  # return decomposition if as_separate else sum of fields
 
 
 class HNN(nn.Module): 
