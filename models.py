@@ -8,12 +8,14 @@ class MLP(nn.Module):
     def __init__(self, input_dim, output_dim, hidden_dim):
       super(MLP, self).__init__()
       self.lin_1 = nn.Linear(input_dim, hidden_dim)
-      self.lin_2 = nn.Linear(hidden_dim, output_dim)
+      self.lin_2 = nn.Linear(hidden_dim, hidden_dim)
+      self.lin_3 = nn.Linear(hidden_dim, output_dim)
     
     def forward(self, x, t=None):
       inputs = torch.cat([x, t], axis=-1) if t is not None else x
       h = self.lin_1(inputs).tanh() 
-      y_hat = self.lin_2(h)
+      h = h + self.lin_2(h).tanh()
+      y_hat = self.lin_3(h)
       return y_hat
 
 

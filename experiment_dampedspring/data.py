@@ -12,7 +12,7 @@ def hamiltonian_fn(coords):
     H = (p**2).sum() + (q**2).sum() # spring hamiltonian (linear oscillator)
     return H
 
-def analytic_model(coords, rho=RHO, get_separate=False):
+def analytic_model(coords, t=None, rho=RHO, get_separate=False):
     coords = np.array(coords)
     added_xyz_axis = False  # a bit hacky
     if coords.shape[-1] == 2: # in the case that pq axes is last, add another axis
