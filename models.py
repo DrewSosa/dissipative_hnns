@@ -10,8 +10,9 @@ class MLP(nn.Module):
       self.lin_1 = nn.Linear(input_dim, hidden_dim)
       self.lin_2 = nn.Linear(hidden_dim, output_dim)
     
-    def forward(self, x):
-      h = self.lin_1(x).tanh() 
+    def forward(self, x, t=None):
+      inputs = torch.cat([x, t], axis=-1) if t is not None else x
+      h = self.lin_1(inputs).tanh() 
       y_hat = self.lin_2(h)
       return y_hat
 
@@ -22,8 +23,8 @@ class HHD(nn.Module):
     self.mlp_h = MLP(input_dim, 1, hidden_dim)  # Instantiate an MLP for learning the conservative component
     self.mlp_d = MLP(input_dim, 1, hidden_dim)  # Instantiate an MLP for learning the dissipative component
     
-  def forward(self, x, rho=None, as_separate=False): 
-    inputs = torch.cat([x, rho], axis=-1) if rho is not None else x
+  def forward(self, x, t=None, as_separate=False): 
+    inputs = torch.cat([x, t], axis=-1) if t is not None else x
     D = self.mlp_d(inputs)
     H = self.mlp_h(inputs)
 
@@ -46,8 +47,9 @@ class HNN(nn.Module):
     super(HNN, self).__init__()  # Inherit the methods of the Module constructor
     self.mlp = MLP(input_dim, 1, hidden_dim)  # Instantiate an instance of our baseline model.
     
-  def forward(self, x): 
-    output = self.mlp(x)  # Bx2 Get the scalars from our baseline model
+  def forward(self, x, t=None):
+    inputs = torch.cat([x, t], axis=-1) if t is not None else x
+    output = self.mlp(inputs)  # Bx2 Get the scalars from our baseline model
 
     H = output[...,0]  # Separate out the Dissapative (D) and Hamiltonian (H) functions
     H_grads = torch.autograd.grad(H.sum(), x, create_graph=True)[0]

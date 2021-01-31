@@ -10,14 +10,14 @@ class ObjectView(object):
     def __init__(self, d): self.__dict__ = d
     
 def get_args(as_dict=False):
-  arg_dict = {'input_dim': 2,
+  arg_dict = {'input_dim': 3,
               'hidden_dim': 256, # capacity
               'output_dim': 2,
               'learning_rate': 1e-2, 
               'test_every': 50,
               'print_every': 200,
               'batch_size': 100,
-              'train_split': 0.85,  # train/test dataset percentage
+              'train_split': 0.8,  # train/test dataset percentage
               'total_steps': 5000,  # because we have a synthetic dataset
               'device': 'cuda', # {"cpu", "cuda"} for using GPUs
               'seed': 42,
@@ -43,8 +43,8 @@ def train(model, args, data):
 
   for step in range(args.total_steps):  # training loop 
 
-    x, dx = [get_batch(data[k], step, args) for k in ['x', 'dx']]
-    dx_hat = model(x)  # feeding forward
+    x, t, dx = [get_batch(data[k], step, args) for k in ['x', 't', 'dx']]
+    dx_hat = model(x, t=t)  # feeding forward
     loss = (dx-dx_hat).pow(2).mean()  # L2 loss function
     loss.backward(); optimizer.step(); optimizer.zero_grad()  # backpropogation
 
@@ -53,9 +53,9 @@ def train(model, args, data):
     # Testing our data with desired frequency (test_every)
     if step % args.test_every == 0:
 
-      x_test, dx_test = [get_batch(data[k], step=0, args=args)
-                          for k in ['x_test', 'dx_test']]
-      dx_hat_test = model(x_test)  # testing our model. 
+      x_test, t_test, dx_test = [get_batch(data[k], step=0, args=args)
+                          for k in ['x_test', 't_test', 'dx_test']]
+      dx_hat_test = model(x_test, t=t_test)  # testing our model. 
       test_loss = (dx_test-dx_hat_test).pow(2).mean().item() # L2 loss
 
       results['test_loss'].append(test_loss)

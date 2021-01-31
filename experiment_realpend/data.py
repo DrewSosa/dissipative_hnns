@@ -40,12 +40,14 @@ def get_lipson_data(args, save_path=None):
   data = {k: state[:,i:i+1] for i, k in enumerate(names)}
   x = state[:,2:4]
   dx = (x[1:] - x[:-1]) / (data['t'][1:] - data['t'][:-1])
-  x, t = x[:-1], data['t'][:-1]
+  dx[:-1] = (dx[:-1] + dx[1:]) / 2  # midpoint rule
+  x, t = x[1:], data['t'][1:]
 
   split_ix = int(state.shape[0] * args.train_split) # train / test split
   data['x'], data['x_test'] = x[:split_ix], x[split_ix:]
+  data['t'], data['t_test'] = 0*x[:split_ix,...,:1], 0*x[split_ix:,...,:1] # H = not time varying
   data['dx'], data['dx_test'] = dx[:split_ix], dx[split_ix:]
-  data['t'], data['t_test'] = t[:split_ix], t[split_ix:]
+  data['time'], data['time_test'] = t[:split_ix], t[split_ix:]
   return data
 
 

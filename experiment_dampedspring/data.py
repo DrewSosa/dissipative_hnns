@@ -42,7 +42,9 @@ def get_dampedspring_data(args, xmin=-1.2, xmax=1.2, ymin=-1.2, ymax=1.2, gridsi
   
     # Construct the dataset
     split_ix = int(x.shape[0] * args.train_split) # train / test split
+    t = np.zeros_like(x[...,:1])
     data = {'x': x[:split_ix], 'x_test': x[split_ix:],
+            't': t[:split_ix], 't_test': t[split_ix:],
             'dx': dx[:split_ix], 'dx_test': dx[split_ix:],
             'dx_irr': dx_irr[:split_ix], 'dx_irr_test': dx_irr[split_ix:],
             'dx_rot': dx_rot[:split_ix], 'dx_rot_test': dx_rot[split_ix:],
