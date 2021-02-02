@@ -1,4 +1,4 @@
-# Deep HHD
+# Dissipative Hamiltonian Neural Networks
 # Andrew Sosanya, Sam Greydanus
 
 import numpy as np

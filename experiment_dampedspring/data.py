@@ -1,4 +1,4 @@
-# Deep Helmholtz Decomposition
+# Dissipative Hamiltonian Neural Networks
 # Andrew Sosanya, Sam Greydanus | 2020
 
 import numpy as np

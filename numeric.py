@@ -1,4 +1,4 @@
-# Deep HHD
+# Dissipative Hamiltonian Neural Networks
 # Andrew Sosanya, Sam Greydanus
 
 from scipy import interpolate

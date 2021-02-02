@@ -1,4 +1,4 @@
-# Deep HHD
+# Dissipative Hamiltonian Neural Networks
 # Andrew Sosanya, Sam Greydanus
 
 import torch
@@ -14,14 +14,15 @@ def get_args(as_dict=False):
               'hidden_dim': 256, # capacity
               'output_dim': 2,
               'learning_rate': 1e-2, 
-              'test_every': 50,
+              'test_every': 100,
               'print_every': 200,
-              'batch_size': 100,
-              'train_split': 0.8,  # train/test dataset percentage
+              'batch_size': 128,
+              'train_split': 0.80,  # train/test dataset percentage
               'total_steps': 5000,  # because we have a synthetic dataset
               'device': 'cuda', # {"cpu", "cuda"} for using GPUs
               'seed': 42,
-              'as_separate': False}
+              'as_separate': False,
+              'decay': 0}
   return arg_dict if as_dict else ObjectView(arg_dict)
 
 
@@ -35,7 +36,7 @@ def get_batch(v, step, args):  # helper function for moving batches of data to/f
 def train(model, args, data):
   """ General training function"""
   model = model.to(args.device)  # put the model on the GPU
-  optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)  # setting the Optimizer
+  optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, weight_decay=args.decay)  # setting the Optimizer
 
   model.train()     # doesn't make a difference for now
   t0 = time.time()  # logging the time
@@ -46,7 +47,7 @@ def train(model, args, data):
     x, t, dx = [get_batch(data[k], step, args) for k in ['x', 't', 'dx']]
     dx_hat = model(x, t=t)  # feeding forward
     loss = (dx-dx_hat).pow(2).mean()  # L2 loss function
-    loss.backward(); optimizer.step(); optimizer.zero_grad()  # backpropogation
+    loss.backward(retain_graph=False); optimizer.step(); optimizer.zero_grad()  # backpropogation
 
     results['train_loss'].append(loss.item())  # logging the training loss
 

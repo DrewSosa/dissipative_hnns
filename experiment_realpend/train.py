@@ -1,4 +1,4 @@
-# Hamiltonian Neural Networks | 2019
+# Dissipative Hamiltonian Neural Networks
 # Sam Greydanus, Misko Dzamba, Jason Yosinski
 
 import torch, argparse, os
