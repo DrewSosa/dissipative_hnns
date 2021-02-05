@@ -4,8 +4,8 @@
 import numpy as np
 import autograd
 
-RHO = 0.75
-GRIDSIZE = 20
+RHO = 2.0
+GRIDSIZE = 25
 
 def hamiltonian_fn(coords):
     q, p = coords[...,0,:], coords[...,1,:] # assume axes [...,pq,xyz]
@@ -21,10 +21,10 @@ def analytic_model(coords, t=None, rho=RHO, get_separate=False):
     dcoords = autograd.grad(hamiltonian_fn)(coords)
     dqdt, dpdt = dcoords[...,0:1,:], dcoords[...,1:2,:] # assume axes [...,pq,xyz]
     S = np.concatenate([dpdt, -dqdt], axis=-2)      # conservative (irrotational) component
-    D = -rho * coords                               # dissipative (rotational) component
+    R = -rho * coords ;  R[...,1:,:] = 0    # dissipative component (derivative of Rayleigh function)
     if added_xyz_axis:
-        S, D = S[...,0], D[...,0]
-    return np.stack([S, D]) if get_separate else S + D
+        S, R = S[...,0], R[...,0]
+    return np.stack([S, R]) if get_separate else S + R
 
 def get_dampedspring_data(args, xmin=-1.2, xmax=1.2, ymin=-1.2, ymax=1.2, gridsize=GRIDSIZE, rho=RHO):
     
@@ -33,7 +33,7 @@ def get_dampedspring_data(args, xmin=-1.2, xmax=1.2, ymin=-1.2, ymax=1.2, gridsi
     x = np.stack([b.flatten(), a.flatten()]).T  # axes are [batch, coordinate] where coordinate=(x,y)
 
     # get vector directions corresponding to positions on the field
-    dx_rot, dx_irr = analytic_model(x, rho, get_separate=True)
+    dx_rot, dx_irr = analytic_model(x, t=None, rho=rho, get_separate=True)
     dx = dx_irr + dx_rot
     
     # Shuffle indices
