@@ -5,7 +5,7 @@ Andrew Sosanya, Sam Greydanus | 2020
 * Blog: [greydanus.github.io/2021/06/11/dissipative-hnns/](https://greydanus.github.io/2021/06/11/dissipative-hnns/)
 
 ![Main idea](./static/hero.jpg)
-_Dissipative HNNs (D-HNNs) output two scalar functions, denoted here with **H** and **D**. The first of these two, **H**, is the Hamiltonian. It is perfectly conserved. The second of these two, **D**, is the Rayleigh dissipation function. It models the dissipative component of the dynamics of a physical system. The addition of the dissipation function is what sets this model apart from Hamiltonian Neural Networks; it allows D-HNNs to model systems where energy is not quite conserved, as, for example, in the case of a damped pendulum._
+_Dissipative HNNs (D-HNNs) output two scalar functions, denoted here with **H** and **D**. The first of these two, **H**, is the Hamiltonian. It is perfectly conserved. The second of these two, **D**, is the Rayleigh dissipation function. It models the dissipative component of the dynamics of a physical system. The addition of the dissipation function is what sets this model apart from Hamiltonian Neural Networks; it allows D-HNNs to model systems where energy is not quite conserved, as, for example, in the case of a damped mass-spring system._
 
 Basic usage
 --------
