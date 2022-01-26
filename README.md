@@ -6,7 +6,7 @@ Andrew Sosanya, Sam Greydanus | 2020
 * Paper: [https://arxiv.org/abs/2201.10085](https://arxiv.org/abs/2201.10085)
 * Blog: [greydanus.github.io/2021/06/11/dissipative-hnns/](https://greydanus.github.io/2021/06/11/dissipative-hnns/)
 
-![D-HNN](./static/dhnn.png)
+![Sources and sinks](./static/banner.png)
 
 Basic usage
 --------
