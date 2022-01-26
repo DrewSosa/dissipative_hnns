@@ -1,8 +1,10 @@
 # Dissipative Hamiltonian Neural Networks
 Andrew Sosanya, Sam Greydanus | 2020
 
-* Paper: [arxiv.org/abs/1906.01563]()
-* Blog: [greydanus.github.io/2019/05/15/hamiltonian-nns/]()
+**Note: the name of this project was recently changed from "Deep Helmholtz Decompositions" to "Dissipative Hamiltonian Neural Networks." So if you see a reference to the former, mentally replace it for the latter. We aim to correct any discrepacies in future releases.**
+
+* Paper: [https://arxiv.org/abs/2201.10085](https://arxiv.org/abs/2201.10085)
+* Blog: [greydanus.github.io/2021/06/11/dissipative-hnns/](https://greydanus.github.io/2021/06/11/dissipative-hnns/)
 
 ![D-HNN](./static/dhnn.png)
 
